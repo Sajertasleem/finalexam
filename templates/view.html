@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}View User - Flask CRUD App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        {% if user %}
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-user"></i> User Details
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>ID:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{ user.id }}
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>First Name:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{ user.first_name }}
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>Last Name:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{ user.last_name }}
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <a href="mailto:{{ user.email }}" class="text-decoration-none">
+                                {{ user.email }}
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>Age:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{ user.age }} years old
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>City:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <i class="fas fa-map-marker-alt text-muted"></i> {{ user.city }}
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <strong>Created:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <small class="text-muted">
+                                {{ user.created_at.strftime('%B %d, %Y at %I:%M %p') if user.created_at else 'N/A' }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <a href="{{ url_for('update_user', user_id=user.id) }}" class="btn btn-warning me-md-2">
+                            <i class="fas fa-edit"></i> Edit User
+                        </a>
+                        <a href="{{ url_for('delete_user', user_id=user.id) }}" 
+                           class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this user?')">
+                            <i class="fas fa-trash"></i> Delete User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <h4>User Not Found</h4>
+                    <p class="text-muted">The user you're looking for doesn't exist or has been deleted.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

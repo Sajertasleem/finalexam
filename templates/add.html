@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Add User - Flask CRUD App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-user-plus"></i> Add New User
+                </h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('add_user') }}" method="POST" novalidate>
+                    <!-- First Name -->
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">
+                            <i class="fas fa-user"></i> First Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="first_name" 
+                               name="first_name" 
+                               required
+                               minlength="2"
+                               maxlength="50"
+                               placeholder="Enter first name">
+                        <div class="form-text">Must be between 2-50 characters</div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">
+                            <i class="fas fa-user"></i> Last Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="last_name" 
+                               name="last_name" 
+                               required
+                               minlength="2"
+                               maxlength="50"
+                               placeholder="Enter last name">
+                        <div class="form-text">Must be between 2-50 characters</div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> Email Address <span class="text-danger">*</span>
+                        </label>
+                        <input type="email" 
+                               class="form-control" 
+                               id="email" 
+                               name="email" 
+                               required
+                               maxlength="120"
+                               placeholder="Enter email address">
+                        <div class="form-text">Must be a valid email address</div>
+                    </div>
+
+                    <!-- Age -->
+                    <div class="mb-3">
+                        <label for="age" class="form-label">
+                            <i class="fas fa-calendar-alt"></i> Age <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" 
+                               class="form-control" 
+                               id="age" 
+                               name="age" 
+                               required
+                               min="1"
+                               max="120"
+                               placeholder="Enter age">
+                        <div class="form-text">Must be between 1-120 years</div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label for="city" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> City <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="city" 
+                               name="city" 
+                               required
+                               minlength="2"
+                               maxlength="50"
+                               placeholder="Enter city">
+                        <div class="form-text">Must be between 2-50 characters</div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Add User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('input[required]');
+        
+        // Real-time validation
+        inputs.forEach(function(input) {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
+            });
+        });
+        
+        // Form submission validation
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            inputs.forEach(function(input) {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fix the errors before submitting.');
+            }
+        });
+        
+        function validateField(field) {
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+            
+            // Check if field is empty
+            if (!value) {
+                isValid = false;
+                errorMessage = 'This field is required.';
+            }
+            // Email validation
+            else if (field.type === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    isValid = false;
+                    errorMessage = 'Please enter a valid email address.';
+                }
+            }
+            // Age validation
+            else if (field.name === 'age') {
+                const age = parseInt(value);
+                if (isNaN(age) || age < 1 || age > 120) {
+                    isValid = false;
+                    errorMessage = 'Age must be between 1 and 120.';
+                }
+            }
+            // Name validation
+            else if (field.name === 'first_name' || field.name === 'last_name') {
+                if (value.length < 2 || value.length > 50) {
+                    isValid = false;
+                    errorMessage = 'Name must be between 2 and 50 characters.';
+                }
+            }
+            // City validation
+            else if (field.name === 'city') {
+                if (value.length < 2 || value.length > 50) {
+                    isValid = false;
+                    errorMessage = 'City must be between 2 and 50 characters.';
+                }
+            }
+            
+            // Update field appearance
+            if (isValid) {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            } else {
+                field.classList.remove('is-valid');
+                field.classList.add('is-invalid');
+            }
+            
+            // Update error message
+            let feedback = field.parentNode.querySelector('.invalid-feedback');
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'invalid-feedback';
+                field.parentNode.appendChild(feedback);
+            }
+            feedback.textContent = errorMessage;
+            
+            return isValid;
+        }
+    });
+</script>
+{% endblock %}

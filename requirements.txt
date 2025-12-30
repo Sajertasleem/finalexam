@@ -1,0 +1,26 @@
+# Flask CRUD Application Requirements
+# ===================================
+# 
+# This file contains all the Python packages required to run the Flask CRUD application.
+# Install these packages using: pip install -r requirements.txt
+
+# Core Flask framework
+Flask==2.3.3
+
+# Database ORM for Flask
+Flask-SQLAlchemy==3.0.5
+
+# Additional Flask extensions (optional but recommended)
+Flask-WTF==1.1.1          # For form handling and CSRF protection
+WTForms==3.0.1            # Form validation library
+
+# Development dependencies (optional)
+python-dotenv==1.0.0      # For environment variable management
+
+# Testing dependencies
+pytest==7.4.3             # Testing framework
+pytest-cov==4.1.0         # Coverage plugin for pytest
+pytest-flask==1.3.0       # Flask testing utilities
+
+# Note: SQLite is included with Python by default, so no additional database driver is needed
+
